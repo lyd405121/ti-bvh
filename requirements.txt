@@ -1,0 +1,3 @@
+taichi==1.4.1
+taichi-glsl==0.0.12
+PyWavefront==1.3.3
