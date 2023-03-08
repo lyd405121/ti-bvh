@@ -200,7 +200,7 @@ class Bvh:
         sign = 1.0
         if (t > 0.0):
             sign = -1.0
-        gradient  = point - closest
+        gradient  = (closest - point) * sign
 
         '''
         #complicated way to do this
@@ -307,13 +307,6 @@ class Bvh:
         stack       = ti.Vector([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         stack_pos   = 0
 
-        #in out check
-        sd_extra    = 0.0
-        min0,max0 = self.get_node_min_max(0)
-        inside = self.prim.inside_box(p, min0,max0)
-        if inside == 0:
-            sd_extra,p    = self.prim.sdf_box(p,min0,max0)
-
         # depth first use stack
         while (stack_pos >= 0) & (stack_pos < MAX_SIZE):
             #pop
@@ -349,16 +342,27 @@ class Bvh:
         if stack_pos == MAX_SIZE:
             print("overflow, need larger stack")
 
-        #sign check
-        if (water_tight):
-            if (self.prim.is_inside(closest_prim, p) ):
-                sd = -sd
-        else:
-            origin = p
-            direction = ti.math.normalize((p - closest_p))
-            hit_t, hit_pos, hit_bary,hit_prim = self.ray_trace(origin, direction)
-            if (hit_t < Primitive.INF_VALUE):
-                sd = -sd
+
+        #in out check
+        sd_extra    = 0.0
+        min0,max0 = self.get_node_min_max(0)
+
+        if self.prim.inside_box(p, min0,max0) == 1:
+            #sign check
+            if (water_tight):
+                if (self.prim.is_inside(closest_prim, p) ):
+                    sd = -sd
+            else:
+                #   This is not a watertight mesh
+                #   We need to sample more direction
+                #    _____
+                #   |   
+                #   |____|
+                origin = p
+                direction = ti.math.normalize((p - closest_p))
+                hit_t, hit_pos, hit_bary,hit_prim = self.ray_trace(origin, direction)
+                if (hit_t < Primitive.INF_VALUE):
+                    sd = -sd
 
         return sd+sd_extra,closest_p
 

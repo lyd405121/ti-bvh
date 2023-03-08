@@ -18,8 +18,8 @@ imgui.slider_float('Radius', 1, 1, 50)
 
 
 tri_mesh = TriMesh.TriMesh()
-#tri_mesh.add_obj("model/Simple.obj")
-tri_mesh.add_obj("model/Normal.obj")
+tri_mesh.add_obj("model/Simple.obj")
+#tri_mesh.add_obj("model/Normal.obj")
 #tri_mesh.add_obj("model/Large.obj")
 tri_mesh.setup_layout()
 tri_mesh.update_to_device()
@@ -45,7 +45,7 @@ def MeshControl():
     is_mesh_show_old = is_mesh_show_new
     is_bvh_show_old  = is_bvh_show_new
     if is_mesh_show_new:
-        scene.mesh(tri_mesh.tri_mesh, color=(0.5, 0.5, 0.5))
+        scene.mesh(tri_mesh.tri_mesh, color=(0.5, 0.5, 0.5),show_wireframe=True)
     if is_bvh_show_new :
         scene.lines(tri_mesh.line_bvh,indices=tri_mesh.indice_bvh, color=(1.0, 1.0, 1.0),width =1)
 
@@ -135,6 +135,7 @@ def RayControl():
     draw_line.from_numpy(line_np)
     draw_particle.from_numpy(particle_np)
 
+    imgui.text("Intersect Result")
     if res_hit[0] < 100000.0:
         hit_dis         = "Hit Distance:%.3f"%res_hit[0]
         hit_point_str   = "Hit Point:%.3f,%.3f,%.3f"%(res_hit[1],res_hit[2],res_hit[3])
@@ -158,7 +159,7 @@ def RayControl():
         scene.particles(draw_particle, color=(1.0, 0.0, 0.0),  index_offset=2,index_count=1, radius = particle_r)
         scene.particles(draw_particle, color=(1.0, 1.0, 0.0),  index_offset=4,index_count=1, radius = particle_r)
 
-    imgui.text("Intersect Result")
+
     imgui.text("Signed Distance:%.3f"%res_sd[0])
     imgui.text("Closest Point:%.3f %.3f %.3f"%(res_sd[1],res_sd[2],res_sd[3]))
     imgui.text("Closest Normal:%.3f %.3f %.3f"%(res_sd[4],res_sd[5],res_sd[6]))

@@ -470,7 +470,8 @@ class Primitive:
             edge1 = p2 - p0
             n = edge0.cross(edge1)
             pa = p - p0
-            if (pa.dot(n) > 0.0):
+            #for hard edge, we need a tolerance
+            if (pa.dot(n) > -0.01):
                 ret = 0
             else:
                 ret = 1
