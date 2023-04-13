@@ -199,7 +199,7 @@ class Primitive:
             if(u1+u2>1.0):
                 u1 = 1.0 - u1
                 u2 = 1.0 - u2
-            p = v1 + (p3-p1)*u1 + (v2-p1)*u2 
+            p = p1 + (p3-p1)*u1 + (v2-p1)*u2 
             n =(p2- p1).cross(p3- p1)
             n.normalized()
         elif self.prim_type(index)== PRIM_SPHERE:

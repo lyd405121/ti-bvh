@@ -18,7 +18,8 @@ imgui.slider_float('Radius', 1, 1, 50)
 
 
 tri_mesh = TriMesh.TriMesh()
-tri_mesh.add_obj("model/Simple.obj")
+tri_mesh.add_obj("model/Test.obj")
+#tri_mesh.add_obj("model/Simple.obj")
 #tri_mesh.add_obj("model/Normal.obj")
 #tri_mesh.add_obj("model/Large.obj")
 tri_mesh.setup_layout()
@@ -65,6 +66,8 @@ def CameraControl():
     camera.position(eye[0],eye[1],eye[2])
     camera.lookat(center[0], center[1],center[2])
     camera.up(0.0, 1.0, 0.0)
+    camera.z_near(radius * 0.001)
+    camera.z_far(radius*10.0)
 
 #a ray to intersect the mesh
 old_origin_x  = 0.0
